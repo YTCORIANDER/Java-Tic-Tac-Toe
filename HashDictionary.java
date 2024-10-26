@@ -1,6 +1,6 @@
 /*************************************************
 * HashDictionary.java
-* This program demostrates hash table with separate chaining 
+* This program demostrates linkedlist with separate chaining 
 * and it will map String into position of table
 ************************************************/
 

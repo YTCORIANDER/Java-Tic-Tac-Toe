@@ -61,20 +61,40 @@ public class Configurations {
     }
 
     // check all rows, cols, diagonals
-    public boolean wins(char symbol) {
-        if ((board[0][0] == symbol && board[0][1] == symbol && board[0][2] == symbol) || 
-            (board[1][0] == symbol && board[1][1] == symbol && board[1][2] == symbol) || 
-            (board[2][0] == symbol && board[2][1] == symbol && board[2][2] == symbol) ||
-            (board[0][0] == symbol && board[1][0] == symbol && board[2][0] == symbol) || 
-            (board[0][1] == symbol && board[1][1] == symbol && board[2][1] == symbol) || 
-            (board[0][2] == symbol && board[1][2] == symbol && board[2][2] == symbol) ||
-            (board[0][0] == symbol && board[1][1] == symbol && board[2][2] == symbol) || 
-            (board[0][2] == symbol && board[1][1] == symbol && board[2][0] == symbol)){
-            return true;
+    public boolean wins(char symbol) {  
+        int i=0, j=0;
+        // check horizontal board
+        while(i<boardSize){
+            i++;
+            while(j<boardSize){
+                j++;
+                return board[i][j] == symbol;
+            }
         }
-        return false;
+
+        // check vertical board
+        while(j<boardSize){
+            i++;
+            while(i<boardSize){
+                j++;
+                return board[i][j] == symbol;
+            }
+        }
+
+        // check top left to bottom right
+        while(j<boardSize){
+            j++;
+            return board[j][j] == symbol;
+        }
+
+        // check top right to bottom left
+        while(i<boardSize){
+            i++;
+            return board[i][boardSize - 1 - i] == symbol;
+        }
+        return true;
     }
-    
+        
 
     // check if draw then renturn true
     public boolean isDraw(){
