@@ -1,7 +1,9 @@
-/*************************************************
+/************************************************************************
 * Configurations.java
 * This program demostrates computerPlay described
-************************************************/
+* Determine who win in titactoe through check all rows, cols, diagonals
+* HashDictionary.java interface to this file
+*************************************************************************/
 
 public class Configurations {
     private int boardSize;
@@ -17,21 +19,18 @@ public class Configurations {
 
         // create board
         board = new char[boardSize][boardSize];
-        int i=0, j=0;
 
         // initial the board to space
-        while(i<boardSize){
-            i++;
-            while(j<boardSize){
-                j++;
-                board[i][j]=' ';
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                board[i][j] = ' ';
             }
         }
     }
     
     // return empty hashdictionary 6379
     public HashDictionary createDictionary(){
-        return new HashDictionary(6379);
+        return new HashDictionary(boardSize);
     }
 
     // check board config is exists or not
@@ -60,41 +59,88 @@ public class Configurations {
         return (board[row][col] == 0);
     }
 
-    // check all rows, cols, diagonals
-    public boolean wins(char symbol) {  
-        int i=0, j=0;
-        // check horizontal board
-        while(i<boardSize){
-            i++;
-            while(j<boardSize){
+    public boolean wins(char symbol) {
+        //using like flag check exist won the game
+        int won;
+    
+        // Check horizontal board
+        int i = 0;
+        while (i < boardSize) {
+            won = 0;
+            int j = 0;
+            while (j < boardSize) {
+                if (board[i][j] == symbol) {
+                    won++;
+                    if (won == lengthToWin) {
+                        return true;
+                    }
+                }
                 j++;
-                return board[i][j] == symbol;
             }
-        }
-
-        // check vertical board
-        while(j<boardSize){
             i++;
-            while(i<boardSize){
-                j++;
-                return board[i][j] == symbol;
-            }
         }
-
-        // check top left to bottom right
-        while(j<boardSize){
+    
+        // Check vertical board
+        int j = 0;
+        while (j < boardSize) {
+            won = 0;
+            i = 0;
+            while (i < boardSize) {
+                if (board[i][j] == symbol) {
+                    won++;
+                    if (won == lengthToWin) {
+                        return true;
+                    }
+                }
+                i++;
+            }
             j++;
-            return board[j][j] == symbol;
         }
-
-        // check top right to bottom left
-        while(i<boardSize){
+    
+        // Check top-left to bottom-right diagonal
+        i = 0;
+        while (i <= boardSize - lengthToWin) {
+            j = 0;
+            while (j <= boardSize - lengthToWin) {
+                won = 0;
+                int k = 0;
+                while (k < lengthToWin) {
+                    if (board[i + k][j + k] == symbol) {
+                        won++;
+                        if (won == lengthToWin) {
+                            return true;
+                        }
+                    }
+                    k++;
+                }
+                j++;
+            }
             i++;
-            return board[i][boardSize - 1 - i] == symbol;
         }
-        return true;
+    
+        // Check top-right to bottom-left diagonal
+        i = 0;
+        while (i <= boardSize - lengthToWin) {
+            j = lengthToWin - 1;
+            while (j < boardSize) {
+                won = 0;
+                int k = 0;
+                while (k < lengthToWin) {
+                    if (board[i + k][j - k] == symbol) {
+                        won++;
+                        if (won == lengthToWin) {
+                            return true;
+                        }
+                    }
+                    k++;
+                }
+                j++;
+            }
+            i++;
+        }
+        return false;
     }
-        
+            
 
     // check if draw then renturn true
     public boolean isDraw(){
