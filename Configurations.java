@@ -45,6 +45,7 @@ public class Configurations {
     // add board config to hash table
     public void addConfiguration(HashDictionary hashTable, int score) {
         String boardConfig = toString();
+        // extend new board
         Data record = new Data(boardConfig, score);
         hashTable.put(record);
     }
@@ -59,86 +60,40 @@ public class Configurations {
         return (board[row][col] == 0);
     }
 
-    public boolean wins(char symbol) {
-        //using like flag check exist won the game
-        int won;
-    
-        // Check horizontal board
-        int i = 0;
-        while (i < boardSize) {
-            won = 0;
-            int j = 0;
-            while (j < boardSize) {
-                if (board[i][j] == symbol) {
-                    won++;
-                    if (won == lengthToWin) {
-                        return true;
-                    }
-                }
-                j++;
-            }
+    // check all rows, cols, diagonals
+    public boolean wins(char symbol) {  
+        int i=0, j=0;
+        // check horizontal board
+        while(i<boardSize){
             i++;
-        }
-    
-        // Check vertical board
-        int j = 0;
-        while (j < boardSize) {
-            won = 0;
-            i = 0;
-            while (i < boardSize) {
-                if (board[i][j] == symbol) {
-                    won++;
-                    if (won == lengthToWin) {
-                        return true;
-                    }
-                }
-                i++;
+            while(j<boardSize){
+                j++;
+                return board[i][j] == symbol;
             }
+        }
+
+        // check vertical board
+        while(j<boardSize){
+            i++;
+            while(i<boardSize){
+                j++;
+                return board[i][j] == symbol;
+            }
+        }
+
+        // check diagonal top left to bottom right
+        while(j<boardSize){
             j++;
+            return board[j][j] == symbol;
         }
-    
-        // Check top-left to bottom-right diagonal
-        i = 0;
-        while (i <= boardSize - lengthToWin) {
-            j = 0;
-            while (j <= boardSize - lengthToWin) {
-                won = 0;
-                int k = 0;
-                while (k < lengthToWin) {
-                    if (board[i + k][j + k] == symbol) {
-                        won++;
-                        if (won == lengthToWin) {
-                            return true;
-                        }
-                    }
-                    k++;
-                }
-                j++;
-            }
+
+        // check diagonal top right to bottom left
+        while(i<boardSize){
             i++;
+            return board[i][boardSize - 1 - i] == symbol;
         }
-    
-        // Check top-right to bottom-left diagonal
-        i = 0;
-        while (i <= boardSize - lengthToWin) {
-            j = lengthToWin - 1;
-            while (j < boardSize) {
-                won = 0;
-                int k = 0;
-                while (k < lengthToWin) {
-                    if (board[i + k][j - k] == symbol) {
-                        won++;
-                        if (won == lengthToWin) {
-                            return true;
-                        }
-                    }
-                    k++;
-                }
-                j++;
-            }
-            i++;
-        }
-        return false;
+
+        return true;
     }
             
 
